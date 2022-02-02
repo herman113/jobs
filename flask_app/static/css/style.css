@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: inline-block;
+}
+.link,
+.right {
+  float: right;
+  text-decoration: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+.red {
+  color: red;
+}
+
+.outline {
+  border: 1px solid #ccc;
+  width: fit-content;
+  margin: 0 30px;
+  padding: 20px;
+  margin-bottom: 20px;
+}

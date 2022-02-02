@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- linking a css style sheet -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <!-- <link rel="stylesheet" type="text/css" href="../static/css/style.css" /> -->
+    <!-- linking a javascript file -->
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+    <!-- Need to link this below for Navbar -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Custom CSS files go AFTER linking Bootstrap - so starting here -->
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div class="container-fluid bg-info p-4">
+      <header>
+        <h1 class="header">Hello {{ this_user.first_name }}</h1>
+        <br />
+        <br />
+        <!-- linking an image -->
+        <!-- <img src="{{ url_for('static', filename='images/welcome_flask.png') }}" /> -->
+        <a class="btn btn-primary mx-2 right" href="/jobs/new" role="button"
+          >New Job</a
+        >
+        <a href="/logout" class="right">Log out</a>
+      </header>
+      <h5>Everyone's Jobs</h5>
+      <!-- {{all_jobs}} -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in all_jobs["nonTaken_jobs"] %}
+          <tr>
+            <td>{{ job.title }}</td>
+            <td>{{ job.location }}</td>
+            <td>
+              <a
+                class="btn btn-primary mx-2"
+                href="/jobs/{{job.id}}"
+                role="button"
+                >View</a
+              >
+
+              {% if job.creator.id == this_user.id %}
+              <form
+                action="/jobs/{{job.id}}/delete"
+                method="POST"
+                style="display: inline-block"
+              >
+                <button class="btn btn-danger mx-2" type="submit">
+                  Remove
+                </button>
+              </form>
+              <a
+                class="btn btn-warning mx-2"
+                href="/jobs/{{job.id}}/edit_job_form"
+                role="button"
+                >Edit</a
+              >
+              {% endif %}
+              <a
+                class="btn btn-secondary mx-2"
+                href="/jobs/{{job.id}}/link_user_to_job_holder_id"
+                role="button"
+                >Add</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <br />
+      <h5>{{ this_user.first_name }}s' Jobs</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in all_jobs["your_jobs"] %}
+          <tr>
+            <td>{{ job.title }}</td>
+            <td>
+              <a href="/jobs/{{job.id}}">View |</a>
+              <form
+                action="/jobs/{{job.id}}/delete"
+                method="POST"
+                style="display: inline-block"
+              >
+                <input
+                  class=""
+                  type="submit"
+                  value="Done"
+                  style="
+                    display: inline-block;
+                    border: none;
+                    background-color: rgba(
+                      var(--bs-info-rgb),
+                      var(--bs-bg-opacity)
+                    ) !important;
+                    color: red;
+                    text-decoration: underline;
+                  "
+                />
+              </form>
+              <a href="/jobs/{{job.id}}/unlink_user_to_job_holder_id"
+                >| Give Up</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
