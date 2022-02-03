@@ -1,13 +1,15 @@
 # a cursor is the object we use to interact with the database
 from re import S
 import pymysql.cursors
+import os
+SECRET_KEY = os.getenv("MY_SQL_KEY")
 # this class will give us an instance of a connection to our database
 class MySQLConnection:
     def __init__(self, db):
         # change the user and password as needed
         connection = pymysql.connect(host = 'localhost',
                                     user = 'root', 
-                                    password = 'rootroot', # CHANGE THIS IF YOU USE A DIFFERENT PASSWORD IN MySql Workbench!
+                                    password = SECRET_KEY, # CHANGE THIS IF YOU USE A DIFFERENT PASSWORD IN MySql Workbench!
                                     db = db,
                                     charset = 'utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
